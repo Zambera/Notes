@@ -258,7 +258,161 @@ public class SimpleServlet extends HttpServlet{
 ${requestScope.name}
 ~~~~
 
-### EL表达式在MVC中的应用
+**优点**
 
+> 渲染简单，null ==> 空串  ，容错能力强，处理能力强
 
+~~~~java
+${sim.name}		//调用getName()
+~~~~
 
+**深度导航**
+
+> 关联属性设在**多**的一方，谁建立谁使用
+
+~~~~java
+//一对多模型
+request.setAttribute("student",s3);
+${student.teacher.name}		//容错
+~~~~
+
+**EL表达式在集合中的应用**
+
+> 集合和数组都是存放数据的容器，数组元素长度类型定义后不可变
+>
+> 集合只能存放对象的地址，不能存放基本类型
+
+~~~~java
+//迭代集合元素
+List l = (List)request.getAttribute("all");
+Iterator iter = l.iterator();
+while(iter.hasNext()){
+    pageContext.setAttribute("sim",iter.next());
+	${sim.name}
+}
+~~~~
+
+## 1.4 Filter组件--过滤器
+
+控制层组件，编码拦截器（乱码问题），懒加载拦截器
+
+**概念**
+
+> 由Java编写的，线程安全的Web组件（由Tomcat调用），主要完成请求的拦截和结果拦截
+
+**原理**
+
+> 发请求后，拦截器调用doFilter()方法，对请求进行验证
+
+### Filter语法
+
+~~~~java
+//包声明，包导入
+package cn.com.filter;
+	//io包,servlet包,http包
+import javax.servlet.*;
+//实现filter接口,复写filter接口所有方法
+public void init(){}	//filter对象创建即执行
+//注入()req,resp,chain
+public void doFilter(req,resp,FilterChain chain){	//请求拦截处理
+    //造型，强转
+    chain.doFilter(req,resp);	//请求下传给控制层组件，如果有下一个拦截器就通知激活下一拦截器
+}		
+public void destroy(){}
+~~~~
+
+**部署**
+
+> 将.java文件放在放在WEB-INF\classes目录的目录结构下，打包编译
+
+ ~~~~bash
+ javac -d xxxx.java
+ ~~~~
+
+### Filter配置
+
+~~~~xml
+<filter>
+    <filter-name></filter-name>
+    <filter-class></filter-class>//启动即创建，不配load-on，调用无参构造创建对象
+</filter>
+<filter-mapping>
+    <filter-name></filter-name>
+    <url-pattern>/*</url-pattern>//拦截或过滤条件，*所有请求都拦截
+</filter-mapping>
+~~~~
+
+### Filter拦截器的应用
+
+1. 编码拦截器(*)
+
+~~~~xml
+<filter>
+    <filter-name></filter-name>
+    <filter-class></filter-class>//启动即创建，不配load-on，调用无参构造创建对象
+    //非必须
+    <init-param>
+    	<param-name></param-name>
+        <param-value></param-value>
+    </init-param>
+</filter>
+~~~~
+
+~~~~java
+public void init(FilterConfig config) throws IOException{
+    //读取web.xml，创建拦截器对象//
+    //通过实例全局变量传递  
+}
+//设置字符集
+public void doFilter() throws IOException{//注入request
+	request.setCharacterEncoding(this.encoding);
+    //请求下传
+}
+~~~~
+
+2. 请求验证拦截器
+
+~~~~java
+//index,注册等页面之拦截不处理	if(!"/index.jsp".equals(targetURL))
+public void doFilter(req,resp,FilterChain chain) throws IOException{//注入request
+	//造型
+    String currentURL = request.getRequestURL();//获取请求字符串
+    //摘取/之后所有字符
+    String targetURL = currentURL.substring(
+        currentURL.indexOf("/",1)//找到/首次出现的位置
+    );
+    //请求下传
+}
+~~~~
+
+3. 非法文字拦截器
+
+~~~~xml
+<filter>
+    <filter-name>char</filter-name>
+    <filter-class></filter-class>//启动即创建，不配load-on，调用无参构造创建对象
+</filter><filter-mapping>    
+    <filter-name>char</filter-name>
+    <url-pattern>/*</url-pattern>//拦截或过滤条件，*所有请求都拦截
+</filter-mapping>
+~~~~
+
+~~~~java
+//取得参数值
+if(content.indexOf("uc")==-1){//查询字符串，请求下传
+}
+else{//response
+}
+~~~~
+
+4. 懒加载拦截器hibernate
+
+~~~~java
+//不使用，不创建
+public void doFilter(req,resp,FilterChain chain) throws IOException{//注入request
+	try{}
+    finally{}
+}
+~~~~
+
+## 1.5 Listener--监听器
