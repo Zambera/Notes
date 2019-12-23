@@ -232,3 +232,33 @@ public class SimpleServlet extends HttpServlet{
 
 ## 1.3 EL表达式
 
+**概念**
+
+> 工作在Jsp页面中的视图端技术，主要从内置对象prsa中取得属性，并进行处理，把处理的结果发送给用户的浏览器显示
+
+**环境要求**
+
+~~~~jsp
+<%@ page isELIgnored="false"%>
+~~~~
+
+> jsp1.2，J2EE2.0，tomcat4.0
+
+**语法**
+
+> ***${ 表达式 }***
+
+**执行顺序**
+
+> page ==> request
+
+**隐式对象**
+
+~~~~
+${requestScope.name}
+~~~~
+
+### EL表达式在MVC中的应用
+
+
+
