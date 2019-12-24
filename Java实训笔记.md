@@ -20,7 +20,7 @@
 - 持久Bean
 
 ~~~~jsp
-<%@page contentType="text/html;charset=utf-8" %>          //静态编码
+	<%@page contentType="text/html;charset=utf-8" %>          //静态编码
 ~~~~
 
 ```java
@@ -399,9 +399,14 @@ public void doFilter(req,resp,FilterChain chain) throws IOException{//注入requ
 
 ~~~~java
 //取得参数值
-if(content.indexOf("uc")==-1){//查询字符串，请求下传
-}
-else{//response
+if(content!=null){
+	if(content.indexOf("AAA")==-1){//查询字符串，请求下传
+		chain.doFilter(request,response) ;
+	}else{
+		response.sendRedirect("error.jsp") ;//此处依然可以RequestDispatcher进行跳转
+	}	
+}else{
+	chain.doFilter(request,response) ;
 }
 ~~~~
 
@@ -416,3 +421,70 @@ public void doFilter(req,resp,FilterChain chain) throws IOException{//注入requ
 ~~~~
 
 ## 1.5 Listener--监听器
+
+**概念**
+
+> 由Java编写的web组件，完成对内置对象的状态变化（创建和销毁）及属性的变化（设定属性、替换属性、移除属性）做监听，并做相应的处理
+
+**主要作用**
+
+> 对application和session的状态变化和属性变化做监听
+
+**配置**
+
+~~~~xml
+<listener>
+	<listener-class></listener-class>	//监听器创建最早
+</listener>
+~~~~
+
+### Listener语法
+
+~~~~java
+//监听application创建销毁
+//1. 包声明
+//2. 包导入javax.servlet.*
+//3. 标准类实现接口ServletContextListener
+private ServletContext application = null;
+public void contextInitialized(ServletContextEvent sce){//application创建时调用
+    this.application = sce.getServletContext();
+    //application.getRealPath获得绝对路径
+}
+public void contextDestroyed(){//application销毁时调用}
+~~~~
+
+~~~~java
+//监听application属性变化，标准类实现接口ServletContextAttributeListener
+public void attributeAdded(ServletContextAttributeEvent scab){}
+public void attributeRemoved(ServletContextAttributeEvent scab){}
+public void attributeReplaced(ServletContextAttributeEvent scab){}
+//jsp
+//getServletContext.
+//监听session属性变化，标准类实现接口HttpSessionAttributeListener
+public void attributeAdded(HttpSessionAttributeEvent sae){}//验证成功后，设置Session值
+public void attributeRemoved(HttpSessionAttributeEvent sae){}
+public void attributeReplaced(HttpSessionAttributeEvent sae){}
+~~~~
+
+~~~~java
+//监听session的创建销毁
+//包声明，包导入
+//实现接口HttpSessionListener
+public void sessionCreated(HttpSessionEvent se){
+    //Session 在用户第一次发请求访问服务器的 动态组件 时创建
+}
+public void sessionDestroyed(HttpSessionEvent se){
+    //关闭浏览器不会马上销毁Session ==> 须javascript
+}
+~~~~
+
+## 1.6 学生信息管理系统
+
+建立数据库
+
+**项目结构**
+
+> 分层（控制层、业务层(单例+同步)、持久层--面向接口DAO、视图层jsp）分模块MVC模式团队开发
+
+
+
