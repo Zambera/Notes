@@ -92,7 +92,7 @@ javac -d xxxx.java
 
 ### 内置对象作用域范围
 
-#### page
+**page**
 
 ~~~~jsp
 <jsp:useBean id="zs" scope="page" class="cn.zte.pxb.SimpleBean"/>
@@ -102,7 +102,7 @@ javac -d xxxx.java
 >
 > 不能用来传Bean
 
-#### request
+**request**
 
 ~~~~jsp
 <jsp:useBean id="zs" scope="request" class="cn.zte.pxb.SimpleBean"/>
@@ -112,7 +112,7 @@ javac -d xxxx.java
 >
 > 客户端跳转不能传request
 
-#### session
+**session**
 
 ~~~~jsp
 <jsp:useBean id="zs" scope="session" class="cn.zte.pxb.SimpleBean"/>
@@ -120,7 +120,7 @@ javac -d xxxx.java
 
 > 用户下线（浏览器关闭）销毁，只应存放认证信息
 
-#### application
+**application**
 
 ~~~~jsp
 <jsp:useBean id="zs" scope="application" class="cn.zte.pxb.SimpleBean"/>
@@ -484,7 +484,10 @@ public void sessionDestroyed(HttpSessionEvent se){
 
 **项目结构**
 
-> 分层（控制层、业务层(单例+同步)、持久层--面向接口DAO、视图层jsp）分模块MVC模式团队开发
+> 分层（控制层、业务层(**单例+同步**)、持久层--面向接口DAO、视图层jsp）分模块MVC模式团队开发
 
+**单例+同步**
 
+> 解决多用户并发混乱(**随机调度**)	==>	保证同一时刻只能有一个用户存储
 
+**jstl标签**
