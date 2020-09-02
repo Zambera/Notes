@@ -78,7 +78,7 @@ print(10 ** 3)	#1000 幂运算
 # x = x + 3		==>		x += 3
 ~~~~
 
-1.5 **Operator Precedence(运算符优先级)**
+### 1.5 **Operator Precedence(运算符优先级)**
 
 ~~~~python
 # parenthesis ()
@@ -87,7 +87,7 @@ print(10 ** 3)	#1000 幂运算
 # addition or subtraction
 ~~~~
 
-1.6 **Math Functions(数学函数)**
+### 1.6 **Math Functions(数学函数)**
 
 ~~~~python
 x = 2.9
@@ -102,7 +102,7 @@ import math
 
 > **google**:*python 3 math module*
 
-1.7 **If Statements**
+### 1.7 **If Statements**
 
 ~~~~python
 is_hot = True
@@ -122,7 +122,7 @@ print("Enjoy your day")
 # Enjoy your day
 ~~~~
 
-1.8 **Logical Operators**
+### 1.8 **Logical Operators**
 
 ~~~~python
 has_high_income = True
@@ -139,7 +139,7 @@ if has_good_credit and not has_crinimal_record:
     print("Eligible for loan")
 ~~~~
 
-1.9 **Comparison Operators**
+### 1.9 **Comparison Operators**
 
 ~~~~python
 temperature = 30
